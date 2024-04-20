@@ -12,6 +12,7 @@ function QuizQuestionRoutes(app) {
     const status = await dao.deleteQuestion(req.params.questionId);
     res.json(status);
    };
+   app.delete("/api/questions/:questionId", deleteQuestion);
 
   const findQuestionsForQuiz = async (req, res) => {
     const { quizId } = req.params;
@@ -19,11 +20,14 @@ function QuizQuestionRoutes(app) {
     res.json(questions);
     return;
    };
+   app.get("/api/quizzes/:quizId/questions", findQuestionsForQuiz);
 
    const findQuestionById = async (req, res) => {
     const question = await dao.findQuestionById(req.params.questionId);
     res.json(question);
    };
+   app.get("/api/questions/:questionId", findQuestionById);
+
 
    const updateQuestion = async (req, res) => {
     const { questionId } = req.params;
@@ -32,7 +36,8 @@ function QuizQuestionRoutes(app) {
     req.session['currentQuestion'] = currentQuestion;
     res.json(status);
    };
-   
+   app.put("/api/questions/:questionId", updateQuestion);
+
    const addChoice = async (req, res) => {
         try {
             const { questionId } = req.params;
@@ -43,6 +48,8 @@ function QuizQuestionRoutes(app) {
             res.status(500).json({ success: false, message: error.message });
         }
     };
+    app.post("/api/questions/:questionId/multipleChoices", addChoice);
+
     const addTrueFalse = async (req, res) => {
         try {
             const { questionId } = req.params;
@@ -53,6 +60,8 @@ function QuizQuestionRoutes(app) {
             res.status(500).json({ success: false, message: error.message });
         }
     };
+    app.post("/api/questions/:questionId/trueFalse", addTrueFalse);
+
     const addBlank = async (req, res) => {
         try {
             const { questionId } = req.params;
@@ -63,34 +72,43 @@ function QuizQuestionRoutes(app) {
             res.status(500).json({ success: false, message: error.message });
         }
     };
+    app.post("/api/questions/:questionId/fillBlanks", addBlank);
 
     const updateChoice = async (req, res) => {
+        const { questionId, choiceId } = req.params; ;
+        const updatedChoice = req.body;
         try {
-            const { questionId } = req.params; 
-            const status = await dao.updateChoiceAnswer(questionId, req.body);
-            res.json({ success: true, status: status });
+            const updatedQuestion = await dao.updateChoiceAnswer(questionId, choiceId, updatedChoice);
+            res.status(200).json(updatedQuestion); 
         } catch (error) {
-            res.status(500).json({ success: false, message: error.message });
+            console.error("Error updating choice:", error);
+            res.status(500).json({ error: "Internal Server Error" });
         }
     };
+    app.put("/api/questions/:questionId/multipleChoices/:choiceId", updateChoice);
+
     const updateTrueFalse = async (req, res) => {
+        const { questionId, tfId } = req.params; 
         try {
-            const { questionId } = req.params; 
-            const status = await dao.updateTrueFalseAnswer(questionId, req.body);
-            res.json({ success: true, status: status });
+            const updateQuestion = await dao.updateTrueFalseAnswer(questionId, tfId, req.body);
+            res.status(200).json(updateQuestion);
         } catch (error) {
             res.status(500).json({ success: false, message: error.message });
         }
     };
+    app.put("/api/questions/:questionId/trueFalse/:tfId", updateTrueFalse);
+
     const updateBlank = async (req, res) => {
+        const { questionId, blankId} = req.params; 
         try {
-            const { questionId } = req.params; 
-            const status = await dao.updateBlankAnswer(questionId, req.body);
-            res.json({ success: true, status: status });
+            const updatedAns = await dao.updateBlankAnswer(questionId, blankId, req.body);
+            res.status(200).json(updatedAns);
         } catch (error) {
             res.status(500).json({ success: false, message: error.message });
         }
     };
+    app.put("/api/questions/:questionId/fillBlanks/:blankId", updateBlank);
+
     const deleteChoice = async (req, res) => {
         try {
             const { questionId , choiceId } = req.params;  
@@ -103,6 +121,8 @@ function QuizQuestionRoutes(app) {
             res.status(500).json({ success: false, message: error.message });
         }
     };
+    app.delete("/api/questions/:questionId/multipleChoices/:choiceId", deleteChoice);
+
     const deleteBlank = async (req, res) => {
         try {
             const { questionId, blankId } = req.params;  
@@ -115,18 +135,19 @@ function QuizQuestionRoutes(app) {
             res.status(500).json({ success: false, message: error.message });
         }
     };
-  app.get("/api/quizzes/:quizId/questions", findQuestionsForQuiz);
-  app.get("/api/questions/:questionId", findQuestionById);
-  app.put("/api/questions/:questionId", updateQuestion);
-  app.delete("/api/questions/:questionId", deleteQuestion);
-  app.post("/api/questions/:questionId/fillBlanks", addBlank);
-  app.post("/api/questions/:questionId/trueFalse", addTrueFalse);
-  app.post("/api/questions/:questionId/multipleChoices", addChoice);
-  app.put("/api/questions/:questionId/multipleChoices/:choiceId", updateChoice);
-  app.put("/api/questions/:questionId/trueFalse", updateTrueFalse);
-  app.put("/api/questions/:questionId/fillBlanks/:blankId", updateBlank);
-  app.delete("/api/questions/:questionId/multipleChoices/:choiceId", deleteChoice);
-  app.delete("/api/questions/:questionId/fillBlanks/:blankId", deleteBlank);
+    app.delete("/api/questions/:questionId/fillBlanks/:blankId", deleteBlank);
+
+ 
+  
+     
+  
+  
+  
+  
+  
+  
+  
+  
   
 }
 export default QuizQuestionRoutes;
