@@ -11,13 +11,20 @@ const quizSchema = new mongoose.Schema({
     pts: Number,
     Questions: Number,
     isPublished: Boolean,
-    shuffleAnswer: Boolean,
+    shuffleAnswers: Boolean,
     QuizType: {
         type: String,
         enum: ["Graded Quiz", "Practice Quiz", "Graded Survey", "Ungraded Survey"],
         default: "Graded Quiz",},
     Minutes: Number,
     AccessCode: Number,
+    timeLimitCheck: Boolean,
+    multipleAttempts: Boolean,
+    showCorrectAnswersCheck: Boolean,
+    showCorrectAnswers: Date,
+    OneQuestionAtATime: Boolean,
+    WebCam: Boolean,
+    lockQuestionAfterAnswering: Boolean,
   },
   { collection: "quizzes" });
 export default quizSchema;
