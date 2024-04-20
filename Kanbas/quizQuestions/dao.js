@@ -18,11 +18,12 @@ export const deleteQuestion = (questionId) => model.deleteOne({ _id: questionId 
 export const findQuestionsByType = (questionType) => model.find({ questionType: questionType });
 
 export const addChoiceAnswer = async (questionId, choice) => {
+    delete choice._id;
     try {
         const question = await model.findById(questionId);
         if (!question) {
             throw new Error("Question Not Found");
-        }
+        }   
         let newChoiceId;
         if (question.multipleChoice && question.multipleChoice.length > 0) {
             const maxId = question.multipleChoice.reduce((max, choice) => {
