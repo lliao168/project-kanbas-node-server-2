@@ -25,6 +25,10 @@ const quizSchema = new mongoose.Schema({
     OneQuestionAtATime: Boolean,
     WebCam: Boolean,
     lockQuestionAfterAnswering: Boolean,
+    category: {
+      type: String,
+      enum: ["ASSIGNMENTS", "QUIZZES", "EXAM", "PROJECT"],
+      default: "ASSIGNMENTS",},
   },
   { collection: "quizzes" });
 export default quizSchema;
