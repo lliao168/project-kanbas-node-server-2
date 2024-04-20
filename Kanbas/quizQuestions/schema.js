@@ -9,16 +9,16 @@ const trueFalseSchema = new mongoose.Schema({
     isTrue: {type: Boolean, }
 });
 const blankSchema = new mongoose.Schema({
-    _id: {type: String, },
-    correctAnswers: {type: String, },
+    _id: String,
+    correctAnswers: String,
     caseInsensitive: {type: Boolean, default: false}
-});
+});  
 const quizQuestionSchema = new mongoose.Schema({
     _id: String,
     quizId: {type: String, required: true},
     title: { type: String, required: true},
     question: {type: String, required: true},
-    points: Number,
+    points: Number, 
     questionType: { 
         type: String,
         required: true,
