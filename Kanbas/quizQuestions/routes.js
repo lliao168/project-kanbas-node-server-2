@@ -13,7 +13,12 @@ function QuizQuestionRoutes(app) {
     res.json(status);
    };
    app.delete("/api/questions/:questionId", deleteQuestion);
-
+   
+   const deleteAllQuestionsByQuizId = async (req, res) => {
+    const status = await dao.deleteQuestionsByQuizId(req.params.quizId);
+    res.json(status);
+   };
+   app.delete("/api/quizzes/:quizId/questions", deleteAllQuestionsByQuizId); 
   const findQuestionsForQuiz = async (req, res) => {
     const { quizId } = req.params;
     const questions = await dao.findQuestionsForQuiz(quizId);

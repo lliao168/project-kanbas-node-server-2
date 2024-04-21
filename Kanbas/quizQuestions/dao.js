@@ -16,7 +16,7 @@ export const findQuestionById = (_id) => model.findById(_id);
 export const updateQuestion = (questionId, question) =>  model.updateOne({ _id: questionId }, { $set: question });
 export const deleteQuestion = (questionId) => model.deleteOne({ _id: questionId });
 export const findQuestionsByType = (questionType) => model.find({ questionType: questionType });
-
+export const deleteQuestionsByQuizId = (quizId) => model.deleteMany({ quizId: quizId });
 export const addChoiceAnswer = async (questionId, choice) => {
     delete choice._id;
     try {
